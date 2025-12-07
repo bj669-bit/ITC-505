@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lights Out — Final Project</title>
+
+  <!-- Font "craziness" -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --tile-size: 60px;
+      --gap: 8px;
+      --board-bg: #111827;
+      --on-color: #fef08a;
+      --off-color: #ffffff;
+      --accent: #06b6d4;
+      --text: #111827;
+    }
+    html,body{
+      height:100%; margin:0;
+      font-family: "Inter", system-ui;
+      background: linear-gradient(180deg,#e6f4ff 0%, #ffffff 45%);
+      color:var(--text);
+      display:flex; align-items:center; justify-content:center;
+      padding:24px; box-sizing:border-box;
+    }
+    .container{ max-width:760px; text-align:center; }
+    h1{
+      font-family: "Space Grotesk", sans-serif;
+      margin:0 0 8px 0; font-size:28px;
+    }
+    .lead{ margin-bottom:18px; color:#052f44; font-size:14px; }
+    .controls{ display:flex; gap:12px; justify-content:center; margin-bottom:16px; flex-wrap:wrap; }
+    button{
+      background:var(--accent); border:0;
+      padding:10px 14px; border-radius:10px;
+      color:white; cursor:pointer; font-weight:600;
+      box-shadow:0 6px 18px rgba(6,182,212,0.18);
+    }
+    button.secondary{ background:transparent; color:var(--text); border:1px solid rgba(0,0,0,0.08); }
+    .meta{ display:flex; gap:16px; justify-content:center; margin-bottom:14px; }
+
+    .board-wrap{ background:var(--board-bg); padding:18px; border-radius:16px; display:inline-block; }
+    .board{
+      display:grid;
+      grid-template-columns: repeat(5, var(--tile-size));
+      grid-template-rows: repeat(5, var(--tile-size));
+      gap: var(--gap);
+    }
+    .tile{
+      width:var(--tile-size); height:var(--tile-size);
+      border-radius:10px; border:2px solid rgba(255,255,255,0.12);
+      cursor:pointer; user-select:none; font-weight:700;
+      box-shadow: 0 6px 14px rgba(2,6,23,0.18);
+    }
+    .tile.is-on{ background:linear-gradient(180deg,var(--on-color), #ffd86b); }
+    .tile.is-off{ background:linear-gradient(180deg,var(--off-color), #e6e6e6); }
+
+    footer{ margin-top:24px; font-size:12px; color:#083344; text-align:left; }
+    footer h3{ margin-top:20px; font-family:"Space Grotesk"; }
+    footer p{ line-height:1.4; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Lights Out — Final Project</h1>
+    <p class="lead">Click a tile to toggle it and its neighbors. All tiles off = you win!</p>
+
+    <div class="controls">
+      <button id="newGameBtn">New Game</button>
+      <button id="solveHintBtn" class="secondary">Show Hint</button>
+      <button id="resetBtn" class="secondary">Reset Board</button>
+    </div>
+
+    <div class="meta">
+      <div><strong>Moves:</strong> <span id="moves">0</span></div>
+      <div><strong>Size:</strong> 5 × 5</div>
+    </div>
+
+    <div class="board-wrap">
+      <div id="board" class="board"></div>
+    </div>
+
+    <footer>
+      <p>Last updated: <span id="lastModified"></span></p>
+
+      <h3>Project Addendum</h3>
+      <p><strong>Process:</strong> The game was created using a 5×5 grid where each tile toggles itself and its orthogonal neighbors. To ensure solvability, the board begins in an all-off state and is scrambled by simulating random legal moves.</p>
+      <p><strong>Creative Choices:</strong> The UI uses Google Fonts (Space Grotesk & Inter) for a fun, modern "font-crazy" look as required. Buttons maintain accessibility, and the layout is responsive.</p>
+      <p><strong>Challenges:</strong> Ensuring solvability was the main challenge, resolved by scrambling using legal moves only. Minor UI timing fixes ensured the final tile update displays before the win alert.</p>
+      <p><strong>Insights:</strong> Simulated-scramble solves solvability elegantly without matrix math. Accessibility and visual clarity improve gameplay and debugging.</p>
+    </footer>
+
+  </div>
+
+  <script>
+    document.getElementById('lastModified').textContent = document.lastModified;
+
+    const ROWS = 5, COLS = 5;
+    const boardEl = document.getElementById('board');
+    const movesEl = document.getElementById('moves');
+    let tiles = [], state = [], moves = 0;
+
+    function buildBoard(){
+      boardEl.innerHTML="";
+      tiles=[];
+      state=new Array(25).fill(false);
+      for(let i=0;i<25;i++){
+        const btn=document.createElement('button');
+        btn.className='tile is-off';
+        btn.dataset.idx=i;
+        btn.addEventListener('click',()=>handleClick(i));
+        boardEl.appendChild(btn);
+        tiles.push(btn);
+      }
+      updateUI();
+    }
+
+    function toggle(i){ state[i]=!state[i]; }
+    function flip(i){
+      const r=Math.floor(i/5), c=i%5;
+      [[r,c],[r-1,c],[r+1,c],[r,c-1],[r,c+1]].forEach(([x,y])=>{
+        if(x>=0&&x<5&&y>=0&&y<5) toggle(x*5+y);
+      });
+    }
+
+    function handleClick(i){
+      flip(i);
+      moves++;
+      updateUI();
+      if(state.every(v=>v===false)) setTimeout(()=>alert("You win!"),80);
+    }
+
+    function updateUI(){
+      tiles.forEach((t,i)=>{
+        t.className = state[i] ? 'tile is-on' : 'tile is-off';
+      });
+      movesEl.textContent=moves;
+    }
+
+    function scramble(n=20){
+      state=new Array(25).fill(false);
+      moves=0;
+      for(let i=0;i<n;i++) flip(Math.floor(Math.random()*25));
+      if(state.every(v=>v===false)) scramble(n+3);
+      updateUI();
+    }
+
+    document.getElementById('newGameBtn').onclick=()=>scramble(22);
+    document.getElementById('resetBtn').onclick=()=>{ state=new Array(25).fill(false); moves=0; updateUI(); };
+    document.getElementById('solveHintBtn').onclick=()=>alert("Try focusing on lit clusters — flip tiles touching the largest group!");
+
+    buildBoard();
+    scramble(22);
+  </script>
+</body>
+</html>
