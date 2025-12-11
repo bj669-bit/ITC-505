@@ -1,0 +1,99 @@
+/* General Page Styling */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #c3f0f0, #fff7fb);
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: #333;
+}
+
+/* Header */
+header {
+    background-color: #00bfff;
+    color: white;
+    padding: 25px 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2rem;
+    text-shadow: 1px 1px 2px #00000040;
+}
+
+/* Story Container */
+#story-container {
+    background: #ffffffcc;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 700px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+#story {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+}
+
+#image-container img {
+    max-width: 80%;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Choices Buttons */
+#choices button {
+    display: block;
+    margin: 10px auto;
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #ff9f1c;
+    color: white;
+    transition: transform 0.2s, background 0.2s;
+}
+
+#choices button:hover {
+    transform: scale(1.05);
+    background: #ffbf69;
+}
+
+/* Restart Button */
+#restart {
+    display: none;
+    margin-top: 20px;
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    background: #2ec4b6;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#restart:hover {
+    background: #3fd1c6;
+}
+
+/* Footer */
+footer {
+    background: #00bfffcc;
+    color: white;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+footer h3 {
+    margin-top: 10px;
+    font-size: 1.2rem;
+}
+
+footer p {
+    max-width: 800px;
+    margin: 5px auto;
+    line-height: 1.6;
+}
