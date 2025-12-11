@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
             margin: 0;
             padding: 0;
             display: flex;
@@ -16,137 +16,136 @@
             min-height: 100vh;
             color: #333;
         }
+
         .container {
             background: #ffffffdd;
-            padding: 30px 40px;
-            margin-top: 40px;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            max-width: 600px;
-            width: 90%;
+            padding: 40px 50px;
+            margin-top: 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            max-width: 650px;
+            width: 95%;
             text-align: center;
         }
+
         h1 {
-            color: #1a73e8;
-            margin-bottom: 20px;
+            color: #ff5c5c;
+            margin-bottom: 25px;
+            font-size: 2em;
         }
+
         form label {
             display: block;
             margin: 10px 0 5px;
-            font-weight: bold;
+            font-weight: 700;
+            color: #1a73e8;
         }
+
         input[type="text"] {
             width: 90%;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
             border: 1px solid #ccc;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-size: 16px;
         }
+
         button {
-            background: #ff5c5c;
+            background: #1a73e8;
             color: white;
             border: none;
-            padding: 12px 25px;
+            padding: 15px 30px;
             font-size: 16px;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
             transition: background 0.3s ease;
         }
+
         button:hover {
-            background: #ff1c1c;
+            background: #155ab6;
         }
+
         #story, #randomNumber {
-            margin-top: 20px;
+            margin-top: 25px;
             font-size: 18px;
             font-weight: 500;
             background: #f1f1f1;
-            padding: 15px;
-            border-radius: 10px;
+            padding: 20px;
+            border-radius: 12px;
             transition: all 0.3s ease;
-            white-space: pre-wrap;
         }
+
         footer {
-            margin-top: 30px;
+            margin-top: 35px;
             font-size: 14px;
             color: #555;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>🎉 Create Your Fun Mad Lib!</h1>
-    <form id="madLibForm">
-        <label for="adjective">Adjective:</label>
-        <input type="text" id="adjective" name="adjective" placeholder="e.g., silly" required>
+    <div class="container">
+        <h1>🎉 Create Your Fun Mad Lib!</h1>
+        <form id="madLibForm">
+            <label for="adjective">Adjective:</label>
+            <input type="text" id="adjective" name="adjective" placeholder="e.g., silly" required>
 
-        <label for="noun">Noun:</label>
-        <input type="text" id="noun" name="noun" placeholder="e.g., dragon" required>
+            <label for="noun">Noun:</label>
+            <input type="text" id="noun" name="noun" placeholder="e.g., dragon" required>
 
-        <label for="verb">Verb:</label>
-        <input type="text" id="verb" name="verb" placeholder="e.g., dance" required>
+            <label for="verb">Verb:</label>
+            <input type="text" id="verb" name="verb" placeholder="e.g., dance" required>
 
-        <label for="place">Place:</label>
-        <input type="text" id="place" name="place" placeholder="e.g., park" required>
+            <label for="place">Place:</label>
+            <input type="text" id="place" name="place" placeholder="e.g., park" required>
 
-        <label for="pluralNoun">Plural Noun:</label>
-        <input type="text" id="pluralNoun" name="pluralNoun" placeholder="e.g., cupcakes" required>
+            <label for="pluralNoun">Plural Noun:</label>
+            <input type="text" id="pluralNoun" name="pluralNoun" placeholder="e.g., cupcakes" required>
 
-        <button type="submit">Generate Story</button>
-    </form>
+            <button type="submit">Generate Story</button>
+        </form>
 
-    <h2>Result:</h2>
-    <p id="story"></p>
-    <p id="randomNumber"></p>
+        <div id="story"></div>
+        <div id="randomNumber"></div>
 
-    <footer>
-        <p>Last updated: <span id="lastModified"></span></p>
-        <p>Addendum: Bhavana Jandhyala, ITC-505 Lab 7 Mad Lib Assignment</p>
-    </footer>
-</div>
+        <footer>
+            <p>Last updated: <span id="lastModified"></span></p>
+            <p>Addendum: This Mad Lib is created by Bhavana Jandhyala for ITC-505 Lab 7.</p>
+        </footer>
+    </div>
 
-<script>
-    document.getElementById('lastModified').textContent = document.lastModified;
+    <script>
+        // Show last modified date
+        document.getElementById('lastModified').textContent = document.lastModified;
 
-    const form = document.getElementById('madLibForm');
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
+        // Handle Mad Lib generation
+        const form = document.getElementById('madLibForm');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
 
-        const formData = {
-            adjective: document.getElementById('adjective').value,
-            noun: document.getElementById('noun').value,
-            verb: document.getElementById('verb').value,
-            place: document.getElementById('place').value,
-            pluralNoun: document.getElementById('pluralNoun').value
-        };
+            // Collect input values
+            const adjective = document.getElementById('adjective').value.trim();
+            const noun = document.getElementById('noun').value.trim();
+            const verb = document.getElementById('verb').value.trim();
+            const place = document.getElementById('place').value.trim();
+            const pluralNoun = document.getElementById('pluralNoun').value.trim();
 
-        try {
-            // Submit Mad Lib form
-            const response = await fetch('/submit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            });
-            const data = await response.json();
-
-            if (data.error) {
-                document.getElementById('story').textContent = data.error;
-                document.getElementById('randomNumber').textContent = '';
+            // Validation
+            if (!adjective || !noun || !verb || !place || !pluralNoun) {
+                document.getElementById('story').textContent = "Please fill in all fields!";
+                document.getElementById('randomNumber').textContent = "";
                 return;
             }
 
-            // Get random number
-            const randRes = await fetch('/do_a_random');
-            const randData = await randRes.json();
+            // Generate Mad Lib story
+            const madLib = `Today I went to ${place} and saw a ${adjective} ${noun}. I decided to ${verb} with ${pluralNoun}. What an adventure!`;
 
-            document.getElementById('story').textContent = data.madLib;
-            document.getElementById('randomNumber').textContent = `Your random number is: ${randData.addednum}`;
+            // Generate random number
+            const randomNum = Math.floor(Math.random() * 100) + 1;
 
-        } catch (err) {
-            console.error(err);
-            document.getElementById('story').textContent = "Error generating story!";
-        }
-    });
-</script>
+            // Display results
+            document.getElementById('story').textContent = madLib;
+            document.getElementById('randomNumber').textContent = `Your random number is: ${randomNum}`;
+        });
+    </script>
 </body>
 </html>
