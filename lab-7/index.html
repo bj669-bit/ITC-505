@@ -16,7 +16,6 @@
             min-height: 100vh;
             color: #333;
         }
-
         .container {
             background: #ffffffdd;
             padding: 30px 40px;
@@ -27,18 +26,15 @@
             width: 90%;
             text-align: center;
         }
-
         h1 {
             color: #1a73e8;
             margin-bottom: 20px;
         }
-
         form label {
             display: block;
             margin: 10px 0 5px;
             font-weight: bold;
         }
-
         input[type="text"] {
             width: 90%;
             padding: 10px;
@@ -47,7 +43,6 @@
             margin-bottom: 15px;
             font-size: 16px;
         }
-
         button {
             background: #ff5c5c;
             color: white;
@@ -58,11 +53,9 @@
             cursor: pointer;
             transition: background 0.3s ease;
         }
-
         button:hover {
             background: #ff1c1c;
         }
-
         #story, #randomNumber {
             margin-top: 20px;
             font-size: 18px;
@@ -71,8 +64,8 @@
             padding: 15px;
             border-radius: 10px;
             transition: all 0.3s ease;
+            white-space: pre-wrap;
         }
-
         footer {
             margin-top: 30px;
             font-size: 14px;
@@ -81,75 +74,79 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎉 Create Your Fun Mad Lib!</h1>
-        <form id="madLibForm">
-            <label for="adjective">Adjective:</label>
-            <input type="text" id="adjective" name="adjective" placeholder="e.g., silly" required>
+<div class="container">
+    <h1>🎉 Create Your Fun Mad Lib!</h1>
+    <form id="madLibForm">
+        <label for="adjective">Adjective:</label>
+        <input type="text" id="adjective" name="adjective" placeholder="e.g., silly" required>
 
-            <label for="noun">Noun:</label>
-            <input type="text" id="noun" name="noun" placeholder="e.g., dragon" required>
+        <label for="noun">Noun:</label>
+        <input type="text" id="noun" name="noun" placeholder="e.g., dragon" required>
 
-            <label for="verb">Verb:</label>
-            <input type="text" id="verb" name="verb" placeholder="e.g., dance" required>
+        <label for="verb">Verb:</label>
+        <input type="text" id="verb" name="verb" placeholder="e.g., dance" required>
 
-            <label for="place">Place:</label>
-            <input type="text" id="place" name="place" placeholder="e.g., park" required>
+        <label for="place">Place:</label>
+        <input type="text" id="place" name="place" placeholder="e.g., park" required>
 
-            <label for="pluralNoun">Plural Noun:</label>
-            <input type="text" id="pluralNoun" name="pluralNoun" placeholder="e.g., cupcakes" required>
+        <label for="pluralNoun">Plural Noun:</label>
+        <input type="text" id="pluralNoun" name="pluralNoun" placeholder="e.g., cupcakes" required>
 
-            <button type="submit">Generate Story</button>
-        </form>
+        <button type="submit">Generate Story</button>
+    </form>
 
-        <h2>Result:</h2>
-        <p id="story"></p>
-        <p id="randomNumber"></p>
+    <h2>Result:</h2>
+    <p id="story"></p>
+    <p id="randomNumber"></p>
 
-        <footer>
-            <p>Last updated: <span id="lastModified"></span></p>
-        </footer>
-    </div>
+    <footer>
+        <p>Last updated: <span id="lastModified"></span></p>
+        <p>Addendum: Bhavana Jandhyala, ITC-505 Lab 7 Mad Lib Assignment</p>
+    </footer>
+</div>
 
-    <script>
-        document.getElementById('lastModified').textContent = document.lastModified;
+<script>
+    document.getElementById('lastModified').textContent = document.lastModified;
 
-        const form = document.getElementById('madLibForm');
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
+    const form = document.getElementById('madLibForm');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-            const formData = {
-                adjective: document.getElementById('adjective').value,
-                noun: document.getElementById('noun').value,
-                verb: document.getElementById('verb').value,
-                place: document.getElementById('place').value,
-                pluralNoun: document.getElementById('pluralNoun').value
-            };
+        const formData = {
+            adjective: document.getElementById('adjective').value,
+            noun: document.getElementById('noun').value,
+            verb: document.getElementById('verb').value,
+            place: document.getElementById('place').value,
+            pluralNoun: document.getElementById('pluralNoun').value
+        };
 
-            try {
-                const response = await fetch('/submit', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
-                const data = await response.json();
+        try {
+            // Submit Mad Lib form
+            const response = await fetch('/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+            const data = await response.json();
 
-                if (data.error) {
-                    document.getElementById('story').textContent = data.error;
-                    document.getElementById('randomNumber').textContent = '';
-                    return;
-                }
-
-                const randRes = await fetch('/do_a_random');
-                const randData = await randRes.json();
-
-                document.getElementById('story').textContent = data.madLib;
-                document.getElementById('randomNumber').textContent = `Your random number is: ${randData.addednum}`;
-
-            } catch (err) {
-                console.error(err);
+            if (data.error) {
+                document.getElementById('story').textContent = data.error;
+                document.getElementById('randomNumber').textContent = '';
+                return;
             }
-        });
-    </script>
+
+            // Get random number
+            const randRes = await fetch('/do_a_random');
+            const randData = await randRes.json();
+
+            document.getElementById('story').textContent = data.madLib;
+            document.getElementById('randomNumber').textContent = `Your random number is: ${randData.addednum}`;
+
+        } catch (err) {
+            console.error(err);
+            document.getElementById('story').textContent = "Error generating story!";
+        }
+    });
+</script>
 </body>
 </html>
