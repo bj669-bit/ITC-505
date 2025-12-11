@@ -11,7 +11,7 @@ server.use(express.json());
 const publicPath = path.join(__dirname, 'public');
 server.use(express.static(publicPath));
 
-// Generate random number route
+// Random number endpoint
 server.get('/do_a_random', (req, res) => {
   res.json({ addednum: Math.floor(Math.random() * 100) + 1 });
 });
@@ -20,12 +20,10 @@ server.get('/do_a_random', (req, res) => {
 server.post('/submit', (req, res) => {
     const { adjective, noun, verb, place, pluralNoun } = req.body;
 
-    // Validate input
     if (!adjective || !noun || !verb || !place || !pluralNoun) {
         return res.status(400).json({ error: "All fields are required!" });
     }
 
-    // Generate Mad Lib story
     const madLib = `Today I went to ${place} and saw a ${adjective} ${noun}. I decided to ${verb} with ${pluralNoun}. What an adventure!`;
 
     res.json({ madLib });
