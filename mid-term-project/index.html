@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doraemon Adventure</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Doraemon: Choose Your Adventure</h1>
+    </header>
+
+    <main>
+        <div id="story-container">
+            <div id="story"></div>
+            <div id="image-container">
+                <img id="story-image" src="" alt="Story Image">
+            </div>
+        </div>
+
+        <div id="choices"></div>
+        <button id="restart" onclick="startGame()">Restart Game</button>
+    </main>
+
+    <footer>
+        <div class="footer-section">
+            <p>Last updated: <span id="lastModified"></span></p>
+            <h3>Addendum: Process & Challenges</h3>
+            <p>
+                This Doraemon-themed adventure game was designed to practice HTML, CSS, and JavaScript skills. 
+                I planned the story flow with multiple paths to ensure at least 8 unique endings. Each story node includes text, image, and choice objects. 
+                Challenges included managing dynamic buttons and making sure images update correctly with story progression. 
+                Using a central update function simplified debugging and allowed all paths to work smoothly. 
+                This project improved my understanding of DOM manipulation, event listeners, and interactive web design.
+            </p>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+        var x = document.lastModified;
+        document.getElementById('lastModified').textContent = x;
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
