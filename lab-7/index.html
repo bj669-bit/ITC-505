@@ -3,46 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <title>Lab 7: Mad Lib</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            background: #ffffffdd;
+            padding: 30px 40px;
+            margin-top: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #1a73e8;
+            margin-bottom: 20px;
+        }
+
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        button {
+            background: #ff5c5c;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #ff1c1c;
+        }
+
+        #story, #randomNumber {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: 500;
+            background: #f1f1f1;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
-    <h1>Mad Lib Form</h1>
-    <form id="madLibForm">
-        <label for="adjective">Adjective:</label>
-        <input type="text" id="adjective" name="adjective" required><br><br>
+    <div class="container">
+        <h1>🎉 Create Your Fun Mad Lib!</h1>
+        <form id="madLibForm">
+            <label for="adjective">Adjective:</label>
+            <input type="text" id="adjective" name="adjective" placeholder="e.g., silly" required>
 
-        <label for="noun">Noun:</label>
-        <input type="text" id="noun" name="noun" required><br><br>
+            <label for="noun">Noun:</label>
+            <input type="text" id="noun" name="noun" placeholder="e.g., dragon" required>
 
-        <label for="verb">Verb:</label>
-        <input type="text" id="verb" name="verb" required><br><br>
+            <label for="verb">Verb:</label>
+            <input type="text" id="verb" name="verb" placeholder="e.g., dance" required>
 
-        <label for="place">Place:</label>
-        <input type="text" id="place" name="place" required><br><br>
+            <label for="place">Place:</label>
+            <input type="text" id="place" name="place" placeholder="e.g., park" required>
 
-        <label for="pluralNoun">Plural Noun:</label>
-        <input type="text" id="pluralNoun" name="pluralNoun" required><br><br>
+            <label for="pluralNoun">Plural Noun:</label>
+            <input type="text" id="pluralNoun" name="pluralNoun" placeholder="e.g., cupcakes" required>
 
-        <button type="submit">Create Mad Lib</button>
-    </form>
+            <button type="submit">Generate Story</button>
+        </form>
 
-    <h2>Result:</h2>
-    <p id="story"></p>
-    <p id="randomNumber"></p>
+        <h2>Result:</h2>
+        <p id="story"></p>
+        <p id="randomNumber"></p>
 
-    <!-- Footer -->
-    <footer>
-        <p>Last updated: <span id="lastModified"></span></p>
-    </footer>
-    <script type="text/javascript">
-        // Footer script
-        var x = document.lastModified;
-        document.getElementById('lastModified').textContent = x;
+        <footer>
+            <p>Last updated: <span id="lastModified"></span></p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('lastModified').textContent = document.lastModified;
 
         const form = document.getElementById('madLibForm');
         form.addEventListener('submit', async (e) => {
-            e.preventDefault(); // prevent page reload
+            e.preventDefault();
 
-            // Collect form data
             const formData = {
                 adjective: document.getElementById('adjective').value,
                 noun: document.getElementById('noun').value,
@@ -52,7 +127,6 @@
             };
 
             try {
-                // Send POST request to server
                 const response = await fetch('/submit', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -66,11 +140,9 @@
                     return;
                 }
 
-                // Fetch a random number
                 const randRes = await fetch('/do_a_random');
                 const randData = await randRes.json();
 
-                // Display Mad Lib and random number
                 document.getElementById('story').textContent = data.madLib;
                 document.getElementById('randomNumber').textContent = `Your random number is: ${randData.addednum}`;
 
